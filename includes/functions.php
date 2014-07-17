@@ -51,18 +51,8 @@ class jb_navigation_widget extends WP_Widget {
 
 } // class jb_navigation_widget
 
-
-// register jb_navigation_widget widget
-function jb_navigation_widget_register() {
-    register_widget( 'jb_navigation_widget' );
-}
-add_action( 'widgets_init', 'jb_navigation_widget_register' );
-
-function jb_navigation_menu_register() {
-  register_nav_menus(
-    array(
-	  'tertiary_navigation' => __( 'Tertiary Navigation' )
-    )
-  );
-}
-add_action( 'init', 'jb_navigation_menu_register' );
+if ( ! function_exists( 'woocommerce_template_single_meta' ) ) :
+	function woocommerce_template_single_meta() {
+		wc_get_template( 'lib/cart.php' );
+	}
+endif;
