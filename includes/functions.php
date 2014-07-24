@@ -23,13 +23,13 @@ class jb_navigation_widget extends WP_Widget {
 	 * @param array $args     Widget arguments.
 	 * @param array $instance Saved values from database.
 	 */
-	public function widget($args, $instance) {
+	public function widget( $args, $instance ) {
 		global $ss_settings;
 		// Get menu
-    $nav_menu = ! empty( $instance['nav_menu'] ) ? wp_get_nav_menu_object( $instance['nav_menu'] ) : false;
+		$nav_menu = ! empty( $instance['nav_menu'] ) ? wp_get_nav_menu_object( $instance['nav_menu'] ) : false;
 		
-    if ( !$nav_menu ) {
-      return;
+		if ( !$nav_menu ) {
+			return;
 		} else {
 			echo $args['before_widget'];
 			if ( ! has_action( 'shoestrap_navigation_top_navbar_override' ) ) {
@@ -79,10 +79,8 @@ class jb_navigation_widget extends WP_Widget {
 	}
 	
 	function update( $new_instance, $old_instance ) {
-		
     $instance['nav_menu'] = (int) $new_instance['nav_menu'];
     return $instance;
-		
   }
 
 } // class jb_navigation_widget
@@ -90,12 +88,13 @@ class jb_navigation_widget extends WP_Widget {
 
 // register jb_navigation_widget widget
 function jb_navigation_widget_register() {
-    register_widget( 'jb_navigation_widget' );
+	register_widget( 'jb_navigation_widget' );
 }
 add_action( 'widgets_init', 'jb_navigation_widget_register' );
 
 // add shopping cart menu item to navigation
-if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) { //check if woocommerce is active
+//check if woocommerce is active
+if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
 	if ( ! function_exists( 'jb_wc_cart_menu_item' ) ) {
 		function jb_wc_cart_menu_item(){ 
 			global $woocommerce;
