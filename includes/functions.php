@@ -102,13 +102,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			
 			if ( shoestrap_getVariable( 'nav_widget_cart_toggle' ) == 1 ) {
 			?>
-			
 				<li>
 					<a class="cart-contents" href="<?php echo $woocommerce->cart->get_cart_url(); ?>" title="<?php _e('View your shopping cart', 'woothemes'); ?>">
 						<i class="glyphicon glyphicon-shopping-cart"></i> <?php echo sprintf(_n('(%d)', '(%d)', $woocommerce->cart->cart_contents_count, 'woothemes'), $woocommerce->cart->cart_contents_count);?>
 					</a>
 				</li>
-			
 			<?php
 			}
 		}
