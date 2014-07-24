@@ -1,6 +1,4 @@
 <?php
-
-
 /*
  * Shoestrap 3 Extra Widget areas options
  */
