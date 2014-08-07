@@ -19,23 +19,49 @@ if ( !function_exists( 'shoestrap_nw_module_options' ) ) {
 					'type'			=> 'switch',
 				);
 			}
-	
+			
 			$fields[] = array(
-				'title'				=> __('Header Background Color', 'shoestrap_nw'),
-				'desc'				=> __('Select the background color for your header. Default: #EEEEEE.', 'shoestrap_nw'),
-				'id'					=> 'nav_widget_bg',
-				'default'			=> '#EEEEEE',
-				'type'				=> 'color',
-				'compiler'		=> true,
+				'title'       => __( 'Float NavBar menu to the right', 'shoestrap' ),
+				'desc'        => __( 'Floats the navigation to the right. Default: On', 'shoestrap' ),
+				'id'          => 'nav_widget_right',
+				'default'     => 0,
+				'type'        => 'switch'
+			);
+			
+			$fields[] = array(
+				'title'				=> __( 'style of NavBar', 'shoestrap' ),
+				'desc'				=> __( 'switched the navigation between default and inverse.', 'shoestrap' ),
+				'id'          => 'nav_widget_style_toggle',
+				'default'     => 'normal',
+				'options'     => array(
+					'normal'		=> __( 'Normal', 'shoestrap' ),
+					'inverse'		=> __( 'Inverse', 'shoestrap' ),
+				),
+				'type'        => 'button_set'
 			);
 	
 			$fields[] = array(
-				'title'				=> __('Header Text Color', 'shoestrap_nw'),
-				'desc'				=> __('Select the text color for your header. Default: #333333.', 'shoestrap_nw'),
-				'id'					=> 'nav_widget_color',
-				'default'			=> '#333333',
+				'id'					=> 'nav_widget_inverse_bg',
 				'type'				=> 'color',
+				'title'				=> __('Inverse Navigation Background Color', 'shoestrap_nw'),
+				'desc'				=> __('Select the background color for your inverse navigation. Default: #EEEEEE.', 'shoestrap_nw'),
 				'compiler'		=> true,
+				'default'			=> '#EEEEEE',
+				'required'		=> array('nav_widget_style_toggle', '=' , 'inverse')
+			);
+			
+			$fields[] = array(
+				'id'					 => 'nav_widget_inverse_pill_color',
+				'type'				=> 'link_color',
+				'title'				=> __('Inverse Pill Navigation Color Option', 'shoestrap_nw'),
+				'compiler'		=> true,
+				'default'			=> array(
+						'regular'		=> '#428bca', // blue
+						'hover'			=> '#2a6496', // red
+						'active'		=> '#2a6496', // purple
+						'visited'		=> '#2a6496'  // purple
+				),
+				'required'		=> array('nav_widget_style_toggle', '=' , 'inverse')
 			);
 			
 		$section['fields'] = $fields;
