@@ -58,6 +58,7 @@ class jb_navigation_widget extends WP_Widget {
 	function form($instance) {
 		
 		$menus = get_terms( 'nav_menu', array( 'hide_empty' => false ) );
+		// Check values
 		if( $instance) {
 			$nav_style = esc_attr( $instance['nav_style'] ); 
 		} else {
@@ -84,8 +85,15 @@ class jb_navigation_widget extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id('nav_style'); ?>"><?php _e('Select Menu Style:'); ?></label>
 			<select class='widefat' id="<?php echo $this->get_field_id('nav_style'); ?>" name="<?php echo $this->get_field_name('nav_style'); ?>" type="text">
-				<option value='navbar-default'<?php echo ($nav_style=='navbar-default')?'selected':''; ?>>Default</option>
-				<option value='navbar-inverse'<?php echo ($nav_style=='navbar-inverse')?'selected':''; ?>>Inverse</option> 
+				<?php
+        $style_options = array(
+					'navbar-default',
+					'navbar-inverse'
+				);
+        foreach ($style_options as $option) {
+        	echo '<option value="' . $option . '" id="' . $option . '"', $nav_style == $option ? ' selected="selected"' : '', '>', $option, '</option>';
+        }
+        ?>
 			</select>                
 		</p>
         
