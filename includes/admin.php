@@ -21,14 +21,6 @@ if ( !function_exists( 'shoestrap_nw_module_options' ) ) {
 			}
 			
 			$fields[] = array(
-				'title'       => __( 'Float NavBar menu to the right', 'shoestrap' ),
-				'desc'        => __( 'Floats the navigation to the right. Default: On', 'shoestrap' ),
-				'id'          => 'nav_widget_right',
-				'default'     => 0,
-				'type'        => 'switch'
-			);
-	
-			$fields[] = array(
 				'id'					=> 'nav_widget_inverse_bg',
 				'type'				=> 'color',
 				'title'				=> __('Inverse Navigation Background Color', 'shoestrap_nw'),

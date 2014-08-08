@@ -27,8 +27,16 @@ class jb_navigation_widget extends WP_Widget {
 		global $ss_settings;
 		// Get menu
 		
-		$nav_menu = ! empty( $instance['nav_menu'] ) ? wp_get_nav_menu_object( $instance['nav_menu'] ) : false;
-		$nav_style = apply_filters( 'jb_navigation_widget_menu_style', $instance['nav_style'] );
+		$nav_menu		= ! empty( $instance['nav_menu'] ) ? wp_get_nav_menu_object( $instance['nav_menu'] ) : false;
+		$nav_type		= apply_filters( 'jb_navigation_widget_menu_type', 'nav-' . $instance['nav_type'] . '' );
+		$nav_style	= apply_filters( 'jb_navigation_widget_menu_style', $instance['nav_style'] );
+		$checkbox		= $instance['checkbox'];
+		if( $instance['nav_float'] == 'right' ){
+			$nav_float	= apply_filters( 'jb_navigation_widget_menu_float', 'pull-' . $instance['nav_float'] . '' );
+		} else {
+			$nav_float	= apply_filters( 'jb_navigation_widget_menu_float', '' );	
+		}
+		$menu_class = $nav_type . ' ' . $nav_float;
 		
 		if ( !$nav_menu ) {
 			return;
@@ -38,10 +46,10 @@ class jb_navigation_widget extends WP_Widget {
 			?>
 				<nav class="<?php echo $nav_style; ?>" role="navigation">
 					<div class="<?php echo apply_filters( 'shoestrap_navbar_container_class', 'container' ); ?>">
-						<ul class="nav nav-pills <?php echo apply_filters( 'jb_navigation_widget_menu_class', '' )?>">
+						<ul class="nav <?php echo apply_filters( 'jb_navigation_widget_menu_class', $menu_class ); ?>">
 							<?php 
 							do_action( 'jb_pre_nav_menu_item' );
-							
+			
 							wp_nav_menu( array( 'menu' => $nav_menu, 'container' => false, 'items_wrap' => '%3$s', 'fallback_cb' => false, 'menu_class' => '' ) );
 							do_action( 'jb_post_nav_menu_item' );
 							?>
@@ -60,9 +68,15 @@ class jb_navigation_widget extends WP_Widget {
 		$menus = get_terms( 'nav_menu', array( 'hide_empty' => false ) );
 		// Check values
 		if( $instance) {
-			$nav_style = esc_attr( $instance['nav_style'] ); 
+			$nav_type		= esc_attr( $instance['nav_type'] ); 
+			$nav_style	= esc_attr( $instance['nav_style'] ); 
+			$nav_float	= esc_attr( $instance['nav_float'] );
+			$checkbox		= esc_attr( $instance['checkbox'] );
 		} else {
-			$nav_style = '';
+			$nav_type		= '';
+			$nav_style	= '';
+			$nav_float	= '';
+			$checkbox		= '';
 		}
 		// If no menus exists, direct the user to go and create some.
 		if ( !$menus ) {
@@ -83,8 +97,22 @@ class jb_navigation_widget extends WP_Widget {
 			</select>
 		</p>
 		<p>
+			<label for="<?php echo $this->get_field_id('nav_type'); ?>"><?php _e('Select Menu Type:'); ?></label>
+			<select class='widefat' id="<?php echo $this->get_field_id('nav_type'); ?>" name="<?php echo $this->get_field_name('nav_type'); ?>">
+				<?php
+        $type_options = array(
+					'pills',
+					'default'
+				);
+        foreach ($type_options as $option) {
+        	echo '<option value="' . $option . '" id="' . $option . '"', $nav_type == $option ? ' selected="selected"' : '', '>', $option, '</option>';
+        }
+        ?>
+			</select>                
+		</p>
+		<p>
 			<label for="<?php echo $this->get_field_id('nav_style'); ?>"><?php _e('Select Menu Style:'); ?></label>
-			<select class='widefat' id="<?php echo $this->get_field_id('nav_style'); ?>" name="<?php echo $this->get_field_name('nav_style'); ?>" type="text">
+			<select class='widefat' id="<?php echo $this->get_field_id('nav_style'); ?>" name="<?php echo $this->get_field_name('nav_style'); ?>">
 				<?php
         $style_options = array(
 					'navbar-default',
@@ -96,13 +124,35 @@ class jb_navigation_widget extends WP_Widget {
         ?>
 			</select>                
 		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id('nav_float'); ?>"><?php _e('Select Menu Position:'); ?></label>
+			<select class='widefat' id="<?php echo $this->get_field_id('nav_float'); ?>" name="<?php echo $this->get_field_name('nav_float'); ?>">
+				<?php
+        $float_options = array(
+					'left',
+					'right'
+				);
+        foreach ($float_options as $option) {
+        	echo '<option value="' . $option . '" id="' . $option . '"', $nav_float == $option ? ' selected="selected"' : '', '>', $option, '</option>';
+        }
+        ?>
+			</select>                
+		</p>
+    <p>
+      <input id="<?php echo $this->get_field_id('checkbox'); ?>" name="<?php echo $this->get_field_name('checkbox'); ?>" type="checkbox" value="1" <?php checked( '1', $checkbox ); ?> />
+      <label for="<?php echo $this->get_field_id('checkbox'); ?>"><?php _e('Checkbox', 'wp_widget_plugin'); ?></label>
+    </p>
+
         
 	<?php    
 	}
 	
 	function update( $new_instance, $old_instance ) {
-		$instance['nav_menu'] = (int) $new_instance['nav_menu'];
-		$instance['nav_style'] = $new_instance['nav_style'];
+		$instance['nav_menu']		= (int) $new_instance['nav_menu'];
+		$instance['nav_type']		= $new_instance['nav_type'];
+		$instance['nav_style']	= $new_instance['nav_style'];
+		$instance['nav_float']	= $new_instance['nav_float'];
+		$instance['checkbox']		= $new_instance['checkbox'];
 		return $instance;
 	}
 
@@ -114,20 +164,6 @@ function jb_navigation_widget_register() {
 	register_widget( 'jb_navigation_widget' );
 }
 add_action( 'widgets_init', 'jb_navigation_widget_register' );
-
-/**
- * Modify the nav class.
- */
-function jb_navigation_widget_pull_class() {
-	global $ss_settings;
-
-	if ( $ss_settings['nav_widget_right'] == '1' ) {
-		return 'pull-right';
-	} else {
-		return '';
-	}
-}
-add_filter( 'jb_navigation_widget_menu_class', 'jb_navigation_widget_pull_class' );
 
 /**
  * Register shoestrap jb_header_widget widget less styles
