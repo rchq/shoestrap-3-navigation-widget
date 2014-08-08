@@ -28,7 +28,7 @@ class jb_navigation_widget extends WP_Widget {
 		// Get menu
 		
 		$nav_menu = ! empty( $instance['nav_menu'] ) ? wp_get_nav_menu_object( $instance['nav_menu'] ) : false;
-		$nav_style = apply_filters( 'jb_navigation_widget_menu_style', $instance['city'] );
+		$nav_style = apply_filters( 'jb_navigation_widget_menu_style', $instance['nav_style'] );
 		
 		if ( !$nav_menu ) {
 			return;
@@ -58,8 +58,11 @@ class jb_navigation_widget extends WP_Widget {
 	function form($instance) {
 		
 		$menus = get_terms( 'nav_menu', array( 'hide_empty' => false ) );
-		$city = $instance['city']; 
-		 
+		if( $instance) {
+			$nav_style = esc_attr( $instance['nav_style'] ); 
+		} else {
+			$nav_style = '';
+		}
 		// If no menus exists, direct the user to go and create some.
 		if ( !$menus ) {
 			echo '<p>'. sprintf( __('No menus have been created yet. <a href="%s">Create some</a>.'), admin_url('nav-menus.php') ) .'</p>';
@@ -79,10 +82,10 @@ class jb_navigation_widget extends WP_Widget {
 			</select>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id('city'); ?>"><?php _e('Select Menu Style:'); ?></label>
-			<select class='widefat' id="<?php echo $this->get_field_id('city'); ?>" name="<?php echo $this->get_field_name('city'); ?>" type="text">
-				<option value='navbar-default'<?php echo ($city=='navbar-default')?'selected':''; ?>>Default</option>
-				<option value='navbar-inverse'<?php echo ($city=='navbar-inverse')?'selected':''; ?>>Inverse</option> 
+			<label for="<?php echo $this->get_field_id('nav_style'); ?>"><?php _e('Select Menu Style:'); ?></label>
+			<select class='widefat' id="<?php echo $this->get_field_id('nav_style'); ?>" name="<?php echo $this->get_field_name('nav_style'); ?>" type="text">
+				<option value='navbar-default'<?php echo ($nav_style=='navbar-default')?'selected':''; ?>>Default</option>
+				<option value='navbar-inverse'<?php echo ($nav_style=='navbar-inverse')?'selected':''; ?>>Inverse</option> 
 			</select>                
 		</p>
         
@@ -91,7 +94,7 @@ class jb_navigation_widget extends WP_Widget {
 	
 	function update( $new_instance, $old_instance ) {
 		$instance['nav_menu'] = (int) $new_instance['nav_menu'];
-		$instance['city'] = $new_instance['city'];
+		$instance['nav_style'] = $new_instance['nav_style'];
 		return $instance;
 	}
 
