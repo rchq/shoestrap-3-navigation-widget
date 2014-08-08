@@ -26,7 +26,9 @@ class jb_navigation_widget extends WP_Widget {
 	public function widget( $args, $instance ) {
 		global $ss_settings;
 		// Get menu
+		
 		$nav_menu = ! empty( $instance['nav_menu'] ) ? wp_get_nav_menu_object( $instance['nav_menu'] ) : false;
+		$nav_style = apply_filters( 'jb_navigation_widget_menu_style', $instance['city'] );
 		
 		if ( !$nav_menu ) {
 			return;
@@ -34,7 +36,7 @@ class jb_navigation_widget extends WP_Widget {
 			echo $args['before_widget'];
 			if ( ! has_action( 'shoestrap_navigation_top_navbar_override' ) ) {
 			?>
-				<nav class="<?php echo apply_filters( 'jb_navigation_widget_menu_style', '' )?>" role="navigation">
+				<nav class="<?php echo $nav_style; ?>" role="navigation">
 					<div class="<?php echo apply_filters( 'shoestrap_navbar_container_class', 'container' ); ?>">
 						<ul class="nav nav-pills <?php echo apply_filters( 'jb_navigation_widget_menu_class', '' )?>">
 							<?php 
@@ -56,6 +58,7 @@ class jb_navigation_widget extends WP_Widget {
 	function form($instance) {
 		
 		$menus = get_terms( 'nav_menu', array( 'hide_empty' => false ) );
+		$city = $instance['city']; 
 		 
 		// If no menus exists, direct the user to go and create some.
 		if ( !$menus ) {
@@ -66,7 +69,7 @@ class jb_navigation_widget extends WP_Widget {
 					
 		<p>
 			<label for="<?php echo $this->get_field_id('nav_menu'); ?>"><?php _e('Select Menu:'); ?></label>
-			<select id="<?php echo $this->get_field_id('nav_menu'); ?>" name="<?php echo $this->get_field_name('nav_menu'); ?>">
+			<select class='widefat' id="<?php echo $this->get_field_id('nav_menu'); ?>" name="<?php echo $this->get_field_name('nav_menu'); ?>">
 				<?php
 				foreach ( $menus as $menu ) {
 					$selected = $nav_menu == $menu->term_id ? ' selected="selected"' : '';
@@ -75,12 +78,20 @@ class jb_navigation_widget extends WP_Widget {
 				?>
 			</select>
 		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id('city'); ?>"><?php _e('Select Menu Style:'); ?></label>
+			<select class='widefat' id="<?php echo $this->get_field_id('city'); ?>" name="<?php echo $this->get_field_name('city'); ?>" type="text">
+				<option value='navbar-default'<?php echo ($city=='navbar-default')?'selected':''; ?>>Default</option>
+				<option value='navbar-inverse'<?php echo ($city=='navbar-inverse')?'selected':''; ?>>Inverse</option> 
+			</select>                
+		</p>
         
 	<?php    
 	}
 	
 	function update( $new_instance, $old_instance ) {
 		$instance['nav_menu'] = (int) $new_instance['nav_menu'];
+		$instance['city'] = $new_instance['city'];
 		return $instance;
 	}
 
@@ -106,22 +117,6 @@ function jb_navigation_widget_pull_class() {
 	}
 }
 add_filter( 'jb_navigation_widget_menu_class', 'jb_navigation_widget_pull_class' );
-
-
-/**
- * Modify the nav style.
- */
-function jb_navigation_widget_style() {
-	global $ss_settings;
-
-	if ( $ss_settings['nav_widget_style_toggle'] == 'inverse' ) {
-		return 'navbar-inverse';
-	} else {
-		return 'navbar-default';
-	}
-}
-add_filter( 'jb_navigation_widget_menu_style', 'jb_navigation_widget_style' );
-
 
 /**
  * Register shoestrap jb_header_widget widget less styles

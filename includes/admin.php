@@ -27,18 +27,6 @@ if ( !function_exists( 'shoestrap_nw_module_options' ) ) {
 				'default'     => 0,
 				'type'        => 'switch'
 			);
-			
-			$fields[] = array(
-				'title'				=> __( 'style of NavBar', 'shoestrap' ),
-				'desc'				=> __( 'switched the navigation between default and inverse.', 'shoestrap' ),
-				'id'          => 'nav_widget_style_toggle',
-				'default'     => 'normal',
-				'options'     => array(
-					'normal'		=> __( 'Normal', 'shoestrap' ),
-					'inverse'		=> __( 'Inverse', 'shoestrap' ),
-				),
-				'type'        => 'button_set'
-			);
 	
 			$fields[] = array(
 				'id'					=> 'nav_widget_inverse_bg',
@@ -47,7 +35,6 @@ if ( !function_exists( 'shoestrap_nw_module_options' ) ) {
 				'desc'				=> __('Select the background color for your inverse navigation. Default: #EEEEEE.', 'shoestrap_nw'),
 				'compiler'		=> true,
 				'default'			=> '#EEEEEE',
-				'required'		=> array('nav_widget_style_toggle', '=' , 'inverse')
 			);
 			
 			$fields[] = array(
@@ -61,7 +48,6 @@ if ( !function_exists( 'shoestrap_nw_module_options' ) ) {
 						'active'		=> '#2a6496', // purple
 						'visited'		=> '#2a6496'  // purple
 				),
-				'required'		=> array('nav_widget_style_toggle', '=' , 'inverse')
 			);
 			
 		$section['fields'] = $fields;
